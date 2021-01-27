@@ -1,0 +1,23 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/stress-test/node_modules
+/stress-test/.pnp
+/stress-test/.pnp.js
+
+# testing
+/stress-test/coverage
+
+# production
+/stress-test/build
+
+# misc
+/stress-test/.DS_Store
+/stress-test/.env.local
+/stress-test/.env.development.local
+/stress-test/.env.test.local
+/stress-test/.env.production.local
+
+/stress-test/npm-debug.log*
+/stress-test/yarn-debug.log*
+/stress-test/yarn-error.log*

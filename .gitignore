@@ -21,3 +21,5 @@
 /stress-test/npm-debug.log*
 /stress-test/yarn-debug.log*
 /stress-test/yarn-error.log*
+
+/stress-test/.eslintcache

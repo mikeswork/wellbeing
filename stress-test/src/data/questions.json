@@ -1,0 +1,21 @@
+{
+	"instructions": "The questions in this scale ask you about your feelings and thoughts during THE LAST MONTH. In each case, you will be asked to indicate your response by placing an \"X\" over the circle representing HOW OFTEN you felt or thought a certain way. Although some of the questions are similar, there are differences between them and you should treat each one as a separate question. The best approach is to answer fairly quickly. That is, don't try to count up the number of times you felt a particular way, but rather indicate the alternative that seems like a reasonable estimate.",
+	"questions": [
+		{
+			"content": "In the last month, how often have you been upset because of something that happened unexpectedly?",
+			"answerMax": 4
+        },
+        {
+			"content": "In the last month, how often have you been upset because of something that happened unexpectedly?",
+			"answerMax": 4
+        },
+        {
+			"content": "In the last month, how often have you felt nervous and \"stressed\"?",
+			"answerMax": 4
+        },
+        {
+			"content": "In the last month, how often have you dealt successfully with day to day problems and annoyances?",
+			"answerMax": 4
+        }
+	]
+}

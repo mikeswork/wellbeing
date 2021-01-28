@@ -66,7 +66,9 @@ function draw() {
 	ctx.strokeStyle = "white";
 	ctx.lineCap = "square";
 
-	shapes.forEach((shape, indx) => {
+	// Draw shapes backwords so that the second shape appears beneath the first
+	for (let indx = shapes.length - 1; indx >= 0; indx--) {
+		const shape = shapes[indx];
 		const perimeter = shape.points;
 		const path = new Path2D();
 
@@ -98,7 +100,7 @@ function draw() {
 		} else {
 			document.getElementById("coordinates").value = JSON.stringify(perimeter);
 		}
-	});
+	}
 }
 
 function findSnap(clX, clY, snap = true) {

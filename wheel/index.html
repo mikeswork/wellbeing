@@ -8,6 +8,22 @@
 		<meta name="author" content="Matteo Mattei" />
 
 		<style>
+            body { margin: 0; padding: 0; }
+
+            .wrapper {
+                height: 100vh;
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+            }
+
+            canvas { cursor: crosshair; }
+
+            .controls { margin-left: 40px; }
+
+            .coord-list { width: 300px;  height: 200px; }
+
 			/* The switch - the box around the slider */
 			.switch {
 				position: relative;
@@ -48,17 +64,11 @@
 				transition: 0.4s;
 			}
 
-            input:disabled + .slider {
-                background-color: #ccc;
-            }
+            input:disabled + .slider { background-color: #ccc; }
 
-			input:checked + .slider {
-				background-color: #f32146;
-			}
+			input:checked + .slider { background-color: #f32146; }
 
-			input:focus + .slider {
-				box-shadow: 0 0 5px orange;
-			}
+			input:focus + .slider { box-shadow: 0 0 5px orange; }
 
 			input:checked + .slider:before {
 				-webkit-transform: translateX(26px);
@@ -67,50 +77,40 @@
 			}
 
 			/* Rounded sliders */
-			.slider.round {
-				border-radius: 34px;
-			}
+			.slider.round { border-radius: 34px; }
 
-			.slider.round:before {
-				border-radius: 50%;
-			}
+			.slider.round:before { border-radius: 50%; }
 		</style>
-	</head>
+    </head>
+    
 	<body onload="start()">
-		<div style="float: left">
+		<div class="wrapper">
 			<canvas
 				id="wheel"
-				width="640"
-				height="480"
-				style="cursor: crosshair"
-				data-imgsrc="image.png"
+				width="600"
+				height="605"
+				data-imgsrc="wheel.png"
 				onmousedown="point_it(event)"
 			>
 				Your browser does not support the HTML5 canvas tag.
 			</canvas>
-		</div>
-		<div style="float: left; margin-left: 20px">
-			<div>
-				<button onclick="undo()">Undo</button>
-				<button onclick="reset()">Clear</button>
-				<p>Press <strong>Left Click</strong> to draw a point.</p>
-				<p><strong>CTRL+Click</strong> or <strong>Right Click</strong> to close the polygon.</p>
-			</div>
-			<div>
-				<p><strong>Coordinates:</strong></p>
-				<textarea id="coordinates" disabled="disabled" style="width: 300px; height: 200px"></textarea>
-			</div>
-			<div>
-				<p>
-					Go to <a href="http://www.matteomattei.com/projects/jpolygon">project website</a> -
-					<a href="https://github.com/matteomattei/jPolygon">source code</a>
-				</p>
-			</div>
-			<label class="switch">
-				<input type="checkbox" id="shape-toggle" onclick="toggleShape()" disabled />
-				<span class="slider round"></span>
-			</label>
-		</div>
+		
+            <div class="controls">
+                <div>
+                    <button onclick="undo()">Undo</button>
+                    <button onclick="reset()">Clear</button>
+                </div>
+                <div>
+                    <p><strong>Coordinates:</strong></p>
+                    <textarea id="coordinates" disabled="disabled" class="coord-list"></textarea>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" id="shape-toggle" onclick="toggleShape()" disabled />
+                    <span class="slider round"></span>
+                </label>
+            </div>
+        </div>
+
 		<script type="text/javascript" src="script.js"></script>
 	</body>
 </html>

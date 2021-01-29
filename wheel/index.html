@@ -24,6 +24,12 @@
 
             .coord-list { width: 300px;  height: 200px; }
 
+            .coord-wrapper { display: none; }
+
+            .buttons { display: flex; }
+
+            .reset-btn { margin-left: 20px; }
+
 			/* The switch - the box around the slider */
 			.switch {
 				position: relative;
@@ -64,7 +70,7 @@
 				transition: 0.4s;
 			}
 
-            input:disabled + .slider { background-color: #ccc; }
+            input:disabled + .slider { background-color: #ddd; }
 
 			input:checked + .slider { background-color: #f32146; }
 
@@ -96,18 +102,19 @@
 			</canvas>
 		
             <div class="controls">
-                <div>
-                    <button onclick="undo()">Undo</button>
-                    <button onclick="reset()">Clear</button>
-                </div>
-                <div>
+                <div class="coord-wrapper">
                     <p><strong>Coordinates:</strong></p>
                     <textarea id="coordinates" disabled="disabled" class="coord-list"></textarea>
                 </div>
-                <label class="switch">
-                    <input type="checkbox" id="shape-toggle" onclick="toggleShape()" disabled />
-                    <span class="slider round"></span>
-                </label>
+
+                <div class="buttons">
+                    <label class="switch">
+                        <input type="checkbox" id="shape-toggle" onclick="toggleShape()" disabled />
+                        <span class="slider round"></span>
+                    </label>
+
+                    <button class="reset-btn" onclick="reset()">Clear</button>
+                </div>
             </div>
         </div>
 

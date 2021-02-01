@@ -1,13 +1,12 @@
 import React from "react";
 
 const answerMax = 4;
-// let number = 0;
 
-export default function Question({ number, content, onselectCallback, isMissing }) {
+export default function Question({ number, content, onselectCallback, checkIndex, highlight }) {
 	let radios = [];
 
-	const clickRadio = (e, ans) => {
-		console.log("clickRadio()");
+	const changeRadio = (e, ans) => {
+		console.log("changeRadio()");
 		// Make sure radio element is checked
 		if (e.target.checked) {
 			onselectCallback(number, ans);
@@ -16,11 +15,18 @@ export default function Question({ number, content, onselectCallback, isMissing 
 
 	for (let i = 0; i <= answerMax; i++) {
 		radios.push(
-			<input key={i} type="radio" name={`answer-${number}`} value={i} onClick={(e) => clickRadio(e, i)} />
+			<input
+				key={i}
+				type="radio"
+				name={`answer-${number}`}
+				value={i}
+				checked={checkIndex === i}
+				onChange={(e) => changeRadio(e, i)}
+			/>
 		);
 	}
 
-	const currStyle = isMissing ? { color: "red" } : {};
+	const currStyle = highlight ? { color: "red" } : {};
 
 	return (
 		<li className="radio-question" style={currStyle}>

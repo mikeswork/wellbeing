@@ -139,6 +139,10 @@ function reset() {
 	}
 }
 
+function save() {
+    Canvas2Image.saveAsImage(canvas, 601, 606, "png", "wellbeing-wheel");
+}
+
 function toggleShape() {
 	shapeIndx = shapeIndx ? 0 : 1;
 }
@@ -172,7 +176,7 @@ function draw() {
 		const perimeter = shape.points;
 		const path = new Path2D();
 
-		const color = indx % 2 ? ["red", "rgba(255, 0, 0, 0.5)"] : ["blue", "rgba(0, 0, 255, 0.5)"];
+		const color = indx % 2 ? ["#8dc63f", "#8dc63f99"] : ["#00a79d", "#00a79d77"];
 
 		for (var i = 0; i < perimeter.length; i++) {
 			// Draw point/line only if current point has coordinates
@@ -284,7 +288,11 @@ function point_it(event) {
 }
 
 function start() {
-	bgImg.src = canvas.getAttribute("data-imgsrc");
+    bgImg.src = canvas.getAttribute("data-imgsrc");
+
+    // Need crossorigin attribute to save image on server, 
+    // but causes image to not load when running locally.
+    bgImg.setAttribute('crossorigin', 'anonymous');
 
 	bgImg.onload = function () {
 		prep_canvas();

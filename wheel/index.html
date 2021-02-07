@@ -53,7 +53,7 @@
 				left: 0;
 				right: 0;
 				bottom: 0;
-				background-color: #2160f3;
+				background-color: #00a79d;
 				-webkit-transition: 0.4s;
 				transition: 0.4s;
 			}
@@ -72,9 +72,9 @@
 
             input:disabled + .slider { background-color: #ddd; }
 
-			input:checked + .slider { background-color: #f32146; }
+			input:checked + .slider { background-color: #8dc63f; }
 
-			input:focus + .slider { box-shadow: 0 0 5px orange; }
+			input:focus + .slider { box-shadow: 0 0 5px black; }
 
 			input:checked + .slider:before {
 				-webkit-transform: translateX(26px);
@@ -86,7 +86,9 @@
 			.slider.round { border-radius: 34px; }
 
 			.slider.round:before { border-radius: 50%; }
-		</style>
+        </style>
+        
+        <script src="canvas2image.js"></script>
     </head>
     
 	<body onload="start()">
@@ -114,6 +116,7 @@
                     </label>
 
                     <button class="reset-btn" onclick="reset()">Clear</button>
+                    <button onclick="save()">Save Image</button>
                 </div>
             </div>
         </div>

@@ -766,7 +766,8 @@
 
 				// Need crossorigin attribute to save image on server,
 				// but causes image to not load when running locally.
-				bgImg.setAttribute('crossorigin', 'anonymous');
+                // Update: not necessary when all in one file I think
+				// bgImg.setAttribute('crossorigin', 'anonymous');
 
 				bgImg.onload = function () {
 					prep_canvas();

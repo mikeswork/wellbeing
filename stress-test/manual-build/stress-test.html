@@ -2,11 +2,19 @@
 	<head>
 		<title>Stress Test</title>
 
-        <style>
-            .test-main ol {
-                display: grid;
-            }
-        </style>
+		<style>
+			table {
+				counter-reset: rowNumber;
+			}
+
+			table tr::before {
+				display: table-cell;
+				counter-increment: rowNumber;
+				content: counter(rowNumber) ".";
+				padding-right: 0.3em;
+				text-align: right;
+			}
+		</style>
 	</head>
 
 	<body>
@@ -96,14 +104,18 @@
 				if (reversePoints) points.reverse();
 				points.forEach((pnt) => {
 					radios.push(
-						/*#__PURE__*/ React.createElement("input", {
-							key: pnt,
-							type: "radio",
-							name: `answer-${number}`,
-							value: pnt,
-							checked: checkIndex === pnt,
-							onChange: (e) => changeRadio(e, pnt),
-						})
+						/*#__PURE__*/ React.createElement(
+							"td",
+							null,
+							/*#__PURE__*/ React.createElement("input", {
+								key: pnt,
+								type: "radio",
+								name: `answer-${number}`,
+								value: pnt,
+								checked: checkIndex === pnt,
+								onChange: (e) => changeRadio(e, pnt),
+							})
+						)
 					);
 				});
 				const currStyle = highlight
@@ -112,7 +124,7 @@
 					  }
 					: {};
 				return /*#__PURE__*/ React.createElement(
-					"li",
+					"tr",
 					{
 						className: "radio-question",
 						style: currStyle,
@@ -122,9 +134,9 @@
 						{
 							htmlFor: `answer-${number}`,
 						},
-						content,
-						radios
-					)
+						/*#__PURE__*/ React.createElement("td", null, content)
+					),
+					radios
 				);
 			}
 
@@ -191,7 +203,7 @@
 									instructions
 								),
 								/*#__PURE__*/ React.createElement(
-									"ol",
+									"table",
 									null,
 									answers.map((a, indx) =>
 										/*#__PURE__*/ React.createElement(Question, {

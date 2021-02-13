@@ -1,0 +1,226 @@
+<html>
+	<head>
+		<title>Stress Test</title>
+
+        <style>
+            .test-main ol {
+                display: grid;
+            }
+        </style>
+	</head>
+
+	<body>
+		<div id="root"></div>
+
+		<!-- Load React. -->
+		<!-- Note: when deploying, replace "development.js" with "production.min.js". -->
+		<script src="https://unpkg.com/react@17/umd/react.production.min.js" crossorigin></script>
+		<script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js" crossorigin></script>
+
+		<script>
+			const data = {
+				instructions:
+					'The questions in this scale ask you about your feelings and thoughts during THE LAST MONTH. In each case, you will be asked to indicate your response by placing an "X" over the circle representing HOW OFTEN you felt or thought a certain way. Although some of the questions are similar, there are differences between them and you should treat each one as a separate question. The best approach is to answer fairly quickly. That is, don\'t try to count up the number of times you felt a particular way, but rather indicate the alternative that seems like a reasonable estimate.',
+				questions: [
+					{
+						content:
+							"In the last month, how often have you been upset because of something that happened unexpectedly?",
+						answerMax: 4,
+					},
+					{
+						content:
+							"In the last month, how often have you felt that you were unable to control the important things in your life?",
+						answerMax: 4,
+					},
+					{
+						content: "In the last month, how often have you felt nervous and stressed",
+						answerMax: 4,
+					},
+					{
+						content:
+							"In the last month, how often have you felt confident about your ability to handle your personal problems?",
+						answerMax: 4,
+						reversePoints: true,
+					},
+					{
+						content: "In the last month, how often have you felt that things were going your way?",
+						answerMax: 4,
+						reversePoints: true,
+					},
+					{
+						content:
+							"In the last month, how often have you found that you could not cope with all the things that you had to do?",
+						answerMax: 4,
+					},
+					{
+						content: "In the last month, how often have you been able to control irritations in your life?",
+						answerMax: 4,
+						reversePoints: true,
+					},
+					{
+						content: "In the last month, how often have you felt that you were on top of things?",
+						answerMax: 4,
+						reversePoints: true,
+					},
+					{
+						content:
+							"In the last month, how often have you been angered because of things that happened that were outside of your control?",
+						answerMax: 4,
+					},
+					{
+						content:
+							"In the last month, how often have you felt difficulties were piling up so high that you could not overcome them?",
+						answerMax: 4,
+					},
+				],
+			};
+
+			const answerMax = 4;
+
+			function Question({ number, content, reversePoints, onselectCallback, checkIndex, highlight }) {
+				let points = [];
+				let radios = [];
+
+				const changeRadio = (e, ans) => {
+					console.log("changeRadio()"); // Make sure radio element is checked
+
+					if (e.target.checked) {
+						onselectCallback(number, ans);
+					}
+				};
+
+				for (let i = 0; i <= answerMax; i++) {
+					points.push(i);
+				}
+
+				if (reversePoints) points.reverse();
+				points.forEach((pnt) => {
+					radios.push(
+						/*#__PURE__*/ React.createElement("input", {
+							key: pnt,
+							type: "radio",
+							name: `answer-${number}`,
+							value: pnt,
+							checked: checkIndex === pnt,
+							onChange: (e) => changeRadio(e, pnt),
+						})
+					);
+				});
+				const currStyle = highlight
+					? {
+							color: "red",
+					  }
+					: {};
+				return /*#__PURE__*/ React.createElement(
+					"li",
+					{
+						className: "radio-question",
+						style: currStyle,
+					},
+					/*#__PURE__*/ React.createElement(
+						"label",
+						{
+							htmlFor: `answer-${number}`,
+						},
+						content,
+						radios
+					)
+				);
+			}
+
+			const blanks = (items) => {
+				return items.map(() => undefined);
+			};
+
+			function Test({ instructions, questions }) {
+				const [missing, setMissing] = React.useState();
+				const [answers, setAnswers] = React.useState(blanks(questions));
+				const [score, setScore] = React.useState();
+
+				const selectAnswer = (num, answer) => {
+					setAnswers((currAnswers) => {
+						let newAnswers = [...currAnswers];
+						newAnswers[num] = answer;
+						return newAnswers;
+					});
+				};
+
+				const submitAnswers = (e) => {
+					e.preventDefault();
+
+					if (answers.every((a) => a !== undefined)) {
+						const score = answers.reduce((a, b) => a + b);
+						console.info("All complete! Score is", score);
+						setMissing(false);
+						setScore(score);
+					} else {
+						console.log(answers);
+						setMissing(true);
+					}
+				};
+
+				let scoreString = "";
+
+				if (score !== undefined) {
+					if (score < 14) scoreString = "Scores ranging from 0-13 are considered low stress.";
+					else if (score < 27) scoreString = "Scores ranging from 14-26 are considered moderate stress.";
+					else scoreString = "Scores ranging from 27-40 are considered high perceived stress.";
+				}
+
+				return /*#__PURE__*/ React.createElement(
+					"div",
+					{
+						className: "test-main",
+					},
+					score || score === 0
+						? /*#__PURE__*/ React.createElement(
+								"div",
+								null,
+								/*#__PURE__*/ React.createElement("div", null, "Your score is: ", score),
+								/*#__PURE__*/ React.createElement("div", null, scoreString)
+						  )
+						: /*#__PURE__*/ React.createElement(
+								"form",
+								null,
+								instructions && /*#__PURE__*/ React.createElement("h2", null, "Instructions:"),
+								/*#__PURE__*/ React.createElement(
+									"p",
+									{
+										className: "test-instructions",
+									},
+									instructions
+								),
+								/*#__PURE__*/ React.createElement(
+									"ol",
+									null,
+									answers.map((a, indx) =>
+										/*#__PURE__*/ React.createElement(Question, {
+											key: indx,
+											number: indx,
+											content: questions[indx].content,
+											reversePoints: questions[indx].reversePoints,
+											onselectCallback: selectAnswer,
+											checkIndex: a,
+											highlight: missing && a === undefined,
+										})
+									)
+								),
+								/*#__PURE__*/ React.createElement("input", {
+									type: "submit",
+									onClick: submitAnswers,
+								})
+						  )
+				);
+			}
+
+			const domContainer = document.querySelector("#root");
+			ReactDOM.render(
+				React.createElement(Test, {
+					instructions: data.instructions,
+					questions: data.questions,
+				}),
+				domContainer
+			);
+		</script>
+	</body>
+</html>

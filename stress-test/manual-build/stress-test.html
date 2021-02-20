@@ -4,7 +4,7 @@
 
 		<style>
 			table {
-				counter-reset: rowNumber;
+				counter-reset: rowNumber -1;
 			}
 
 			table tr::before {
@@ -13,6 +13,29 @@
 				content: counter(rowNumber) ".";
 				padding-right: 0.3em;
 				text-align: right;
+			}
+
+			table tr:nth-child(1)::before {
+				opacity: 0;
+			}
+
+			table td.radio-answer {
+				width: 100px;
+				text-align: center;
+			}
+
+			table th {
+				white-space: pre;
+				text-align: center;
+			}
+
+			.bitalic {
+				font-style: italic;
+				font-weight: bold;
+			}
+
+			input[type="submit"] {
+				font-size: 1.25em;
 			}
 		</style>
 	</head>
@@ -28,7 +51,7 @@
 		<script>
 			const data = {
 				instructions:
-					'The questions in this scale ask you about your feelings and thoughts during THE LAST MONTH. In each case, you will be asked to indicate your response by placing an "X" over the circle representing HOW OFTEN you felt or thought a certain way. Although some of the questions are similar, there are differences between them and you should treat each one as a separate question. The best approach is to answer fairly quickly. That is, don\'t try to count up the number of times you felt a particular way, but rather indicate the alternative that seems like a reasonable estimate.',
+					"The questions in this scale ask you about your feelings and thoughts during the last month. For each question, choose your answer for how often you felt or thought a certain way. Although some of the questions are similar, there are differences between them, so please treat each one as a separate question. The best approach is to go with your first and fast response. And don’t try to count up the number of times you felt a particular way, but rather choose the answer that seems like a reasonable estimate.",
 				questions: [
 					{
 						content:
@@ -106,7 +129,7 @@
 					radios.push(
 						/*#__PURE__*/ React.createElement(
 							"td",
-							null,
+							{ className: "radio-answer" },
 							/*#__PURE__*/ React.createElement("input", {
 								key: pnt,
 								type: "radio",
@@ -179,6 +202,42 @@
 					else scoreString = "Scores ranging from 27-40 are considered high perceived stress.";
 				}
 
+				const footer = React.createElement(
+					"div",
+					{ className: "footer" },
+					React.createElement(
+						"p",
+						null,
+						"Individual scores on the PSS range from 0 to 40 with higher scores indicating higher perceived stress."
+					),
+					React.createElement(
+						"ul",
+						null,
+						React.createElement("li", null, "Scores ranging from 0-13 are considered low stress."),
+						React.createElement("li", null, "Scores ranging from 14-26 are considered moderate stress."),
+						React.createElement(
+							"li",
+							null,
+							"Scores ranging from 27-40 are considered high perceived stress."
+						)
+					),
+					React.createElement(
+						"p",
+						null,
+						"The Perceived Stress Scale measures your perception of what is happening in your life. What you perceive as stressful is not quite the same as how others perceive stress in their lives. Our answers are unique to us and it’s important to assess our own perception of stress without comparing with others, so that we can then address our own perceptions and responses to what we are experiencing."
+					),
+					React.createElement(
+						"p",
+						null,
+						React.createElement("span", { className: "bitalic" }, "Disclaimer: "),
+						React.createElement(
+							"span",
+							{ className: "italic" },
+							"The scores on this PSS do not reflect any particular diagnosis or course of treatment. This tool is meant to help assess your level of stress."
+						)
+					)
+				);
+
 				return /*#__PURE__*/ React.createElement(
 					"div",
 					{
@@ -188,39 +247,61 @@
 						? /*#__PURE__*/ React.createElement(
 								"div",
 								null,
-								/*#__PURE__*/ React.createElement("div", null, "Your score is: ", score),
-								/*#__PURE__*/ React.createElement("div", null, scoreString)
+								/*#__PURE__*/ React.createElement(
+									"div",
+									{ className: "user-score" },
+									"Your score is: ",
+									score
+								),
+								/*#__PURE__*/ React.createElement("div", null, scoreString),
+								footer
 						  )
-						: /*#__PURE__*/ React.createElement(
-								"form",
+						: /*#__PURE__*/
+						  React.createElement(
+								"div",
 								null,
-								instructions && /*#__PURE__*/ React.createElement("h2", null, "Instructions:"),
-								/*#__PURE__*/ React.createElement(
-									"p",
-									{
-										className: "test-instructions",
-									},
-									instructions
-								),
-								/*#__PURE__*/ React.createElement(
-									"table",
+								React.createElement(
+									"form",
 									null,
-									answers.map((a, indx) =>
-										/*#__PURE__*/ React.createElement(Question, {
-											key: indx,
-											number: indx,
-											content: questions[indx].content,
-											reversePoints: questions[indx].reversePoints,
-											onselectCallback: selectAnswer,
-											checkIndex: a,
-											highlight: missing && a === undefined,
-										})
-									)
+									instructions && /*#__PURE__*/ React.createElement("h2", null, "Instructions:"),
+									/*#__PURE__*/ React.createElement(
+										"p",
+										{
+											className: "test-instructions",
+										},
+										instructions
+									),
+									/*#__PURE__*/ React.createElement(
+										"table",
+										null,
+										React.createElement(
+											"tr",
+											null,
+											React.createElement("th", null, ""),
+											React.createElement("th", null, "Never\n0"),
+											React.createElement("th", null, "Almost\nNever\n1"),
+											React.createElement("th", null, "Sometimes\n2"),
+											React.createElement("th", null, "Fairly\nOften\n3"),
+											React.createElement("th", null, "Very\nOften\n4")
+										),
+										answers.map((a, indx) =>
+											/*#__PURE__*/ React.createElement(Question, {
+												key: indx,
+												number: indx,
+												content: questions[indx].content,
+												reversePoints: questions[indx].reversePoints,
+												onselectCallback: selectAnswer,
+												checkIndex: a,
+												highlight: missing && a === undefined,
+											})
+										)
+									),
+									/*#__PURE__*/ React.createElement("input", {
+										type: "submit",
+										onClick: submitAnswers,
+									})
 								),
-								/*#__PURE__*/ React.createElement("input", {
-									type: "submit",
-									onClick: submitAnswers,
-								})
+								footer
 						  )
 				);
 			}

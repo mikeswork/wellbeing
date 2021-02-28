@@ -172,6 +172,8 @@
 				const [answers, setAnswers] = React.useState(blanks(questions));
 				const [score, setScore] = React.useState();
 
+                React.useEffect(() => document.querySelector('body').scrollIntoView(), [score]);
+
 				const selectAnswer = (num, answer) => {
 					setAnswers((currAnswers) => {
 						let newAnswers = [...currAnswers];

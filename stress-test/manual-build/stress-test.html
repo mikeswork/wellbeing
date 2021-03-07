@@ -3,17 +3,31 @@
 		<title>Stress Test</title>
 
 		<style>
+		
+			h2 {
+    			color: #09746d!important;
+			}
+			
 			table {
 				counter-reset: rowNumber -1;
 			}
 
 			table tr::before {
+                vertical-align: inherit;
 				display: table-cell;
 				counter-increment: rowNumber;
 				content: counter(rowNumber) ".";
 				padding-right: 0.3em;
 				text-align: right;
+				font-size: 20px;
+				padding-left: 12px;
 			}
+			.entry-content tr th{
+				font-size: 20px;
+    			line-height: 1.2em;
+    			vertical-align: bottom;
+    			color: #09746d!important;
+    		}
 
 			table tr:nth-child(1)::before {
 				opacity: 0;
@@ -28,14 +42,47 @@
 				white-space: pre;
 				text-align: center;
 			}
+			
+			.entry-content tr td {
+    			font-size: 20px;
+    			line-height: 1.3em;
+    			padding-top: 18px;
+    			padding-bottom: 18px;
+			}
 
 			.bitalic {
 				font-style: italic;
 				font-weight: bold;
+				color: #09746d!important;
+				
 			}
 
 			input[type="submit"] {
-				font-size: 1.25em;
+				padding: .3em 1em!important;
+				color: #fcfcfc;
+				font-size: 26px;
+				background-color: #00a79d;
+				border-radius: 35px;
+				border: none;
+			}
+			.test-instructions{
+				font-size: 22px;
+    			line-height: 1.5em;
+    			padding-bottom: 60px !important;
+			}
+			
+			.footer{
+				font-size: 22px;
+    			line-height: 1.5em;
+    			margin-top: 40px;
+			}
+			.footer ul{
+    			line-height: 1.5em;
+			}
+			
+			.user-score{
+				color: #09746d!important;
+				font-weight: 400;
 			}
 		</style>
 	</head>
@@ -64,7 +111,7 @@
 						answerMax: 4,
 					},
 					{
-						content: "In the last month, how often have you felt nervous and stressed",
+						content: "In the last month, how often have you felt nervous and stressed?",
 						answerMax: 4,
 					},
 					{
@@ -153,11 +200,15 @@
 						style: currStyle,
 					},
 					/*#__PURE__*/ React.createElement(
-						"label",
-						{
-							htmlFor: `answer-${number}`,
-						},
-						/*#__PURE__*/ React.createElement("td", null, content)
+						"td",
+						null,
+						/*#__PURE__*/ React.createElement(
+							"label",
+							{
+								htmlFor: `answer-${number}`,
+							},
+							content
+						)
 					),
 					radios
 				);
@@ -172,7 +223,7 @@
 				const [answers, setAnswers] = React.useState(blanks(questions));
 				const [score, setScore] = React.useState();
 
-                React.useEffect(() => document.querySelector('body').scrollIntoView(), [score]);
+				React.useEffect(() => document.querySelector("body").scrollIntoView(), [score]);
 
 				const selectAnswer = (num, answer) => {
 					setAnswers((currAnswers) => {

@@ -1,0 +1,358 @@
+<html>
+	<head>
+		<title>Stress Test</title>
+
+		<style>
+			h2 {
+				color: #09746d !important;
+			}
+
+			table {
+				counter-reset: rowNumber -1;
+			}
+
+			table tr::before {
+				vertical-align: inherit;
+				display: table-cell;
+				counter-increment: rowNumber;
+				content: counter(rowNumber) ".";
+				padding-right: 0.3em;
+				text-align: right;
+				font-size: 20px;
+				padding-left: 12px;
+			}
+			.entry-content tr th {
+				font-size: 20px;
+				line-height: 1.2em;
+				vertical-align: bottom;
+				color: #09746d !important;
+			}
+
+			table tr:nth-child(1)::before {
+				opacity: 0;
+			}
+
+			table td.radio-answer {
+				width: 100px;
+				text-align: center;
+			}
+
+			table th {
+				white-space: pre;
+				text-align: center;
+			}
+
+			.entry-content tr td {
+				font-size: 20px;
+				line-height: 1.3em;
+				padding-top: 18px;
+				padding-bottom: 18px;
+			}
+
+			.bitalic {
+				font-style: italic;
+				font-weight: bold;
+				color: #09746d !important;
+			}
+
+			input[type="submit"] {
+				padding: 0.3em 1em !important;
+				color: #fcfcfc;
+				font-size: 26px;
+				background-color: #00a79d;
+				border-radius: 35px;
+				border: none;
+			}
+			.test-instructions {
+				font-size: 22px;
+				line-height: 1.5em;
+				padding-bottom: 60px !important;
+			}
+
+			.footer {
+				font-size: 22px;
+				line-height: 1.5em;
+				margin-top: 40px;
+			}
+			.footer ul {
+				line-height: 1.5em;
+			}
+
+			.user-score {
+				color: #09746d !important;
+				font-weight: 400;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="root"></div>
+
+		<!-- Load React. -->
+		<!-- Note: when deploying, replace "development.js" with "production.min.js". -->
+		<script src="https://unpkg.com/react@17/umd/react.production.min.js" crossorigin></script>
+		<script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js" crossorigin></script>
+
+		<script>
+			const data = {
+				instructions:
+					"The questions in this scale ask you about your feelings and thoughts during the last month. For each question, choose your answer for how often you felt or thought a certain way. Although some of the questions are similar, there are differences between them, so please treat each one as a separate question. The best approach is to go with your first and fast response. And don’t try to count up the number of times you felt a particular way, but rather choose the answer that seems like a reasonable estimate.",
+				questions: [
+					{
+						content:
+							"In the last month, how often have you been upset because of something that happened unexpectedly?",
+						answerMax: 4,
+					},
+					{
+						content:
+							"In the last month, how often have you felt that you were unable to control the important things in your life?",
+						answerMax: 4,
+					},
+					{
+						content: "In the last month, how often have you felt nervous and stressed?",
+						answerMax: 4,
+					},
+					{
+						content:
+							"In the last month, how often have you felt confident about your ability to handle your personal problems?",
+						answerMax: 4,
+						reversePoints: true,
+					},
+					{
+						content: "In the last month, how often have you felt that things were going your way?",
+						answerMax: 4,
+						reversePoints: true,
+					},
+					{
+						content:
+							"In the last month, how often have you found that you could not cope with all the things that you had to do?",
+						answerMax: 4,
+					},
+					{
+						content: "In the last month, how often have you been able to control irritations in your life?",
+						answerMax: 4,
+						reversePoints: true,
+					},
+					{
+						content: "In the last month, how often have you felt that you were on top of things?",
+						answerMax: 4,
+						reversePoints: true,
+					},
+					{
+						content:
+							"In the last month, how often have you been angered because of things that happened that were outside of your control?",
+						answerMax: 4,
+					},
+					{
+						content:
+							"In the last month, how often have you felt difficulties were piling up so high that you could not overcome them?",
+						answerMax: 4,
+					},
+				],
+			};
+
+			const answerMax = 4;
+
+			function Question({ number, content, reversePoints, onselectCallback, checkIndex, highlight }) {
+				let points = [];
+				let radios = [];
+				let labels = ["Never 0", "Almost Never 1", "Sometimes 2", "Fairly Often 3", "Very Often 4"];
+
+				const changeRadio = (e, ans) => {
+					console.log("changeRadio()"); // Make sure radio element is checked
+
+					if (e.target.checked) {
+						onselectCallback(number, ans);
+					}
+				};
+
+				for (let i = 0; i <= answerMax; i++) {
+					points.push(i);
+				}
+
+				if (reversePoints) points.reverse();
+				points.forEach((pnt, indx) => {
+					radios.push(
+						/*#__PURE__*/ React.createElement(
+							"div",
+							{ className: "radio-answer" },
+							React.createElement("div", { className: "answer-label" }, labels[indx]),
+							/*#__PURE__*/ React.createElement("input", {
+								key: pnt,
+								type: "radio",
+								name: `answer-${number}`,
+								value: pnt,
+								checked: checkIndex === pnt,
+								onChange: (e) => changeRadio(e, pnt),
+							})
+						)
+					);
+				});
+				const currStyle = highlight
+					? {
+							color: "red",
+					  }
+					: {};
+				return /*#__PURE__*/ React.createElement(
+					"div",
+					{
+						className: "radio-question",
+						style: currStyle,
+					},
+					/*#__PURE__*/ React.createElement(
+						"label",
+						{
+							htmlFor: `answer-${number}`,
+						},
+						content
+					),
+					radios
+				);
+			}
+
+			const blanks = (items) => {
+				return items.map(() => undefined);
+			};
+
+			function Test({ instructions, questions }) {
+				const [missing, setMissing] = React.useState();
+				const [answers, setAnswers] = React.useState(blanks(questions));
+				const [score, setScore] = React.useState();
+
+				React.useEffect(() => document.querySelector("body").scrollIntoView(), [score]);
+
+				const selectAnswer = (num, answer) => {
+					setAnswers((currAnswers) => {
+						let newAnswers = [...currAnswers];
+						newAnswers[num] = answer;
+						return newAnswers;
+					});
+				};
+
+				const submitAnswers = (e) => {
+					e.preventDefault();
+
+					if (answers.every((a) => a !== undefined)) {
+						const score = answers.reduce((a, b) => a + b);
+						console.info("All complete! Score is", score);
+						setMissing(false);
+						setScore(score);
+					} else {
+						console.log(answers);
+						setMissing(true);
+					}
+				};
+
+				let scoreString = "";
+
+				if (score !== undefined) {
+					if (score < 14) scoreString = "Scores ranging from 0-13 are considered low stress.";
+					else if (score < 27) scoreString = "Scores ranging from 14-26 are considered moderate stress.";
+					else scoreString = "Scores ranging from 27-40 are considered high perceived stress.";
+				}
+
+				const footer = React.createElement(
+					"div",
+					{ className: "footer" },
+					React.createElement(
+						"p",
+						null,
+						"Individual scores on the PSS range from 0 to 40 with higher scores indicating higher perceived stress."
+					),
+					React.createElement(
+						"ul",
+						null,
+						React.createElement("li", null, "Scores ranging from 0-13 are considered low stress."),
+						React.createElement("li", null, "Scores ranging from 14-26 are considered moderate stress."),
+						React.createElement(
+							"li",
+							null,
+							"Scores ranging from 27-40 are considered high perceived stress."
+						)
+					),
+					React.createElement(
+						"p",
+						null,
+						"The Perceived Stress Scale measures your perception of what is happening in your life. What you perceive as stressful is not quite the same as how others perceive stress in their lives. Our answers are unique to us and it’s important to assess our own perception of stress without comparing with others, so that we can then address our own perceptions and responses to what we are experiencing."
+					),
+					React.createElement(
+						"p",
+						null,
+						React.createElement("span", { className: "bitalic" }, "Disclaimer: "),
+						React.createElement(
+							"span",
+							{ className: "italic" },
+							"The scores on this PSS do not reflect any particular diagnosis or course of treatment. This tool is meant to help assess your level of stress."
+						)
+					)
+				);
+
+				return /*#__PURE__*/ React.createElement(
+					"div",
+					{
+						className: "test-main",
+					},
+					score || score === 0
+						? /*#__PURE__*/ React.createElement(
+								"div",
+								null,
+								/*#__PURE__*/ React.createElement(
+									"div",
+									{ className: "user-score" },
+									"Your score is: ",
+									score
+								),
+								/*#__PURE__*/ React.createElement("div", null, scoreString),
+								footer
+						  )
+						: /*#__PURE__*/
+						  React.createElement(
+								"div",
+								null,
+								React.createElement(
+									"form",
+									null,
+									instructions && /*#__PURE__*/ React.createElement("h2", null, "Instructions:"),
+									/*#__PURE__*/ React.createElement(
+										"p",
+										{
+											className: "test-instructions",
+										},
+										instructions
+									),
+									/*#__PURE__*/ React.createElement(
+										"div",
+										{ className: "questions" },
+										answers.map((a, indx) =>
+											/*#__PURE__*/ React.createElement(Question, {
+												key: indx,
+												number: indx,
+												content: questions[indx].content,
+												reversePoints: questions[indx].reversePoints,
+												onselectCallback: selectAnswer,
+												checkIndex: a,
+												highlight: missing && a === undefined,
+											})
+										)
+									),
+									/*#__PURE__*/ React.createElement("input", {
+										type: "submit",
+										onClick: submitAnswers,
+									})
+								),
+								footer
+						  )
+				);
+			}
+
+			const domContainer = document.querySelector("#root");
+			ReactDOM.render(
+				React.createElement(Test, {
+					instructions: data.instructions,
+					questions: data.questions,
+				}),
+				domContainer
+			);
+		</script>
+	</body>
+</html>
